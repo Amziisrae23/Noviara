@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>NOVIARA - Catálogo</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fdfdfd; margin:0; }
+    header {
+      background: linear-gradient(90deg, #6a1b9a, #9c27b0);
+      color: white;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header img.logo {
+      height: 50px;
+      margin-right: 15px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8em;
+      letter-spacing: 2px;
+      font-family: 'Georgia', serif;
+      flex-grow: 1;
+      text-align: center;
+    }
+    nav {
+      margin-left: auto;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+    nav li {
+      position: relative;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+      display: block;
+      padding: 5px 10px;
+    }
+    nav a:hover { color: #ffd54f; }
+
+    /* Submenús */
+    nav ul ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #7b1fa2;
+      padding: 10px;
+      border-radius: 5px;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease-in-out;
+      min-width: 220px;
+    }
+    nav ul li:hover > ul {
+      display: flex;
+    }
+    nav ul ul li {
+      width: 100%;
+    }
+    nav ul ul a {
+      color: #fff;
+      padding: 8px 10px;
+      transition: background 0.3s;
+    }
+    nav ul ul a:hover {
+      background: #9c27b0;
+      border-radius: 3px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 { background: #eee; padding: 5px; margin-top: 60px; font-family: 'Georgia', serif; }
+    .producto {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px;
+      width: 220px;
+      display: inline-block;
+      vertical-align: top;
+      background: #fff;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .producto:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .producto img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .titulo { font-weight: bold; margin: 5px 0; font-size: 1em; }
+    .precio { color: #b8860b; margin: 5px 0; font-size: 1.1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Logo NOVIARA -->
+    <img src="logo.png" alt="NOVIARA Logo" class="logo">
+    <h1>NOVIARA BEAUTY</h1>
+    <nav>
+      <ul id="menu-list">
+        <li>
+          <a href="#">Maquillaje</a>
+          <ul>
+            <li><a href="#Labiales">Labiales</a></li>
+            <li><a href="#Labiales_Liquidos">Labiales Líquidos</a></li>
+            <li><a href="#Lipgloss">Lipgloss</a></li>
+            <li><a href="#Sombras">Sombras</a></li>
+            <li><a href="#Bases">Bases</a></li>
+            <li><a href="#Correctores">Correctores</a></li>
+            <li><a href="#Rubores">Rubores</a></li>
+            <li><a href="#Rimel">Rímel</a></li>
+            <li><a href="#Pestañas">Pestañas</a></li>
+            <li><a href="#Cejas">Productos para Cejas</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Cuidado de la piel</a>
+          <ul>
+            <li><a href="#Aceites">Aceites</a></li>
+            <li><a href="#Cremas">Cremas</a></li>
+            <li><a href="#Mascarillas">Mascarillas</a></li>
+            <li><a href="#Protector_Solar">Protector Solar</a></li>
+            <li><a href="#Limpiadores_Faciales">Limpiadores Faciales</a></li>
+            <li><a href="#Serum_Tonicos">Serum y Tónicos</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Cuidado del cabello</a>
+          <ul>
+            <li><a href="#Shampoos_Acondicionadores">Shampoos y Acondicionadores</a></li>
+            <li><a href="#Tintes">Tintes</a></li>
+            <li><a href="#Tratamientos_Cabello_Barba">Tratamientos para Cabello y Barba</a></li>
+            <li><a href="#Fijadores">Fijadores para Cabello</a></li>
+            <li><a href="#Decolorantes">Decolorantes y Peróxidos</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Marcas</a>
+          <ul>
+            <li><a href="#Bissu">Bissú</a></li>
+            <li><a href="#Italia">Italia</a></li>
+            <li><a href="#PinkUp">Pink Up</a></li>
+            <li><a href="#Yuya">Yuya</a></li>
+            <li><a href="#Beauty_Creations">Beauty Creations</a></li>
+            <li><a href="#Romantic_Beauty">Romantic Beauty</a></li>
+            <li><a href="#By_Apple">By Apple</a></li>
+            <li><a href="#Ultramo">Ultramo</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="catalogo"></div>
+
+  <script>
+    async function cargarCSV() {
+      const response = await fetch("catalogo_dubellay.csv");
+      const data = await response.text();
+
+      const filas = data.split("\n").slice(1); // saltar encabezado
+      const contenedor = document.getElementById("catalogo");
+
+      let categorias = {};
+
+      filas.forEach(fila => {
+        const columnas = fila.split(",");
+        if (columnas.length < 6) return;
+
+        const categoria = columnas[0];
+        const marca = columnas[1];
+        const titulo = columnas[2];
+        const precioFinal = columnas[4];
+        let imagen = columnas[5];
+
+        if (imagen.startsWith("//")) {
+          imagen = "https:" + imagen;
+        }
+
+        // Crear sección por categoría
+        if (!categorias[categoria]) {
+          const h2 = document.createElement("h2");
+          h2.textContent = categoria;
+          h2.id = categoria.replace(/\s+/g, "_");
+          contenedor.appendChild(h2);
+          categorias[categoria] = h2;
+        }
+
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.innerHTML = `
+          <img src="${imagen}" alt="${titulo}">
+          <div class="titulo">${marca} - ${titulo}</div>
+          <div class="precio">$${precioFinal} MXN</div>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    cargarCSV();
+  </script>
+</body>
+</html>
