@@ -1,224 +1,607 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>NOVIARA - Catálogo</title>
-  <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fdfdfd; margin:0; }
-    header {
-      background: linear-gradient(90deg, #6a1b9a, #9c27b0);
-      color: white;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header img.logo {
-      height: 50px;
-      margin-right: 15px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.8em;
-      letter-spacing: 2px;
-      font-family: 'Georgia', serif;
-      flex-grow: 1;
-      text-align: center;
-    }
-    nav {
-      margin-left: auto;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 20px;
-    }
-    nav li {
-      position: relative;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-      display: block;
-      padding: 5px 10px;
-    }
-    nav a:hover { color: #ffd54f; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Noviara Beauty — Catálogo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#f9f5ef;--cream2:#f0e8dd;
+  --gold:#b8915a;--gold-l:#d4ac7a;--gold-d:#8c6b3e;
+  --dark:#1a1612;--dark2:#2b2318;
+  --muted:#7a6e63;--muted-l:#b5a99c;
+  --border:rgba(184,145,90,.17);--border-s:rgba(184,145,90,.38);
+  --white:#fff;
+  --sh:0 2px 18px rgba(26,22,18,.07);
+  --sh-modal:0 12px 70px rgba(26,22,18,.32);
+  --r:12px;--r-lg:18px;
+  --nh:62px;--tr:.25s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;overflow-x:hidden}
 
-    /* Submenús */
-    nav ul ul {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #7b1fa2;
-      padding: 10px;
-      border-radius: 5px;
-      flex-direction: column;
-      animation: fadeIn 0.3s ease-in-out;
-      min-width: 220px;
-    }
-    nav ul li:hover > ul {
-      display: flex;
-    }
-    nav ul ul li {
-      width: 100%;
-    }
-    nav ul ul a {
-      color: #fff;
-      padding: 8px 10px;
-      transition: background 0.3s;
-    }
-    nav ul ul a:hover {
-      background: #9c27b0;
-      border-radius: 3px;
-    }
+/* UPLOAD */
+#up{position:fixed;inset:0;background:var(--dark2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+#up.gone{display:none}
+.u-logo{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;letter-spacing:.2em;color:var(--gold-l);text-transform:uppercase;margin-bottom:.3rem}
+.u-tag{font-size:.7rem;letter-spacing:.26em;color:var(--muted-l);text-transform:uppercase;margin-bottom:3rem}
+.u-box{border:1.5px dashed var(--border-s);border-radius:var(--r-lg);padding:3rem 4rem;text-align:center;cursor:pointer;transition:border-color var(--tr),background var(--tr);max-width:420px;width:90%}
+.u-box:hover,.u-box.drag{border-color:var(--gold-l);background:rgba(184,145,90,.06)}
+.u-icon{width:44px;height:44px;margin:0 auto 1.2rem;opacity:.4}
+.u-box p{font-size:.88rem;color:var(--muted-l);line-height:1.65}
+.u-box p strong{color:var(--gold-l);font-weight:500}
+.u-btn{margin-top:1.4rem;padding:.58rem 1.8rem;background:var(--gold);color:var(--cream);border:none;border-radius:99px;font-family:'Jost',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background var(--tr);display:inline-block}
+.u-btn:hover{background:var(--gold-d)}
+.u-hint{margin-top:1.2rem;font-size:.7rem;color:rgba(181,169,156,.4);letter-spacing:.06em}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh}
+#app.on{display:flex}
 
-    h2 { background: #eee; padding: 5px; margin-top: 60px; font-family: 'Georgia', serif; }
-    .producto {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px;
-      width: 220px;
-      display: inline-block;
-      vertical-align: top;
-      background: #fff;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .producto:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .producto img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-    }
-    .titulo { font-weight: bold; margin: 5px 0; font-size: 1em; }
-    .precio { color: #b8860b; margin: 5px 0; font-size: 1.1em; font-weight: bold; }
-  </style>
+/* HEADER */
+header{position:sticky;top:0;z-index:300;background:var(--white);box-shadow:0 1px 14px rgba(26,22,18,.07)}
+.h-top{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:var(--nh)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;letter-spacing:.12em;color:var(--dark);text-transform:uppercase;text-decoration:none;line-height:1}
+.logo em{display:block;font-style:normal;font-size:.52rem;letter-spacing:.26em;color:var(--gold);font-family:'Jost',sans-serif;font-weight:600;margin-top:2px}
+.h-right{display:flex;align-items:center;gap:1.2rem}
+#srch{background:none;border:none;border-bottom:1px solid var(--border-s);padding:.28rem .6rem;font-family:'Jost',sans-serif;font-size:.8rem;color:var(--dark);outline:none;width:150px;transition:border-color var(--tr)}
+#srch::placeholder{color:var(--muted-l)}
+#srch:focus{border-bottom-color:var(--gold)}
+.hbtn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
+.hbtn span{display:block;width:22px;height:1.5px;background:var(--dark)}
+
+/* NAV */
+nav{border-top:1px solid rgba(26,22,18,.06)}
+.nav-list{display:flex;align-items:stretch;padding:0 2rem;margin:0;list-style:none}
+.ni{position:relative}
+.nl{display:flex;align-items:center;gap:4px;padding:.72rem 1.1rem;font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dark);cursor:pointer;border:none;background:none;font-family:'Jost',sans-serif;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color var(--tr),border-color var(--tr)}
+.nl svg{opacity:.45;transition:transform .2s}
+.ni:hover>.nl,.nl.act{color:var(--gold);border-bottom-color:var(--gold)}
+.ni:hover>.nl svg{transform:rotate(180deg)}
+
+/* MEGA */
+.mega{display:none;position:absolute;top:100%;left:0;background:var(--white);border:1px solid rgba(26,22,18,.07);border-top:2.5px solid var(--gold);box-shadow:0 10px 44px rgba(26,22,18,.13);padding:1.6rem 1.8rem;z-index:400;animation:fd .18s ease}
+@keyframes fd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.ni:hover>.mega,.mega:hover{display:flex}
+.mega-cols{display:flex;gap:2.2rem}
+.mega-col{min-width:120px}
+.mc-grp{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);padding-bottom:.5rem;margin-bottom:.4rem;border-bottom:1px solid var(--border);white-space:nowrap}
+.mlink{display:block;font-size:.78rem;color:var(--muted);padding:.22rem 0;cursor:pointer;border:none;background:none;font-family:'Jost',sans-serif;text-align:left;white-space:nowrap;transition:color var(--tr)}
+.mlink:hover,.mlink.acts{color:var(--gold);font-weight:500}
+
+/* MEGA MARCAS — grid ancho */
+.mega-wide{min-width:min(960px,95vw);left:0}
+.mega-brands-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.14rem .7rem;max-height:72vh;overflow-y:auto;width:100%;padding-right:.4rem;scrollbar-width:thin;scrollbar-color:rgba(184,145,90,.22) transparent}
+
+/* MOBILE MENU */
+#mob{display:none;position:fixed;inset:0;top:var(--nh);background:var(--white);z-index:199;overflow-y:auto;padding:0 0 4rem}
+#mob.open{display:block}
+.mob-sec-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:.85rem 1.4rem;font-size:.76rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;background:none;border:none;border-bottom:1px solid var(--border);cursor:pointer;font-family:'Jost',sans-serif;color:var(--dark)}
+.mob-sec-btn svg{transition:transform .2s}
+.mob-sec-btn.open svg{transform:rotate(180deg)}
+.mob-sub{display:none;background:var(--cream);padding:.5rem 1.4rem 1rem 2rem;border-bottom:1px solid var(--border)}
+.mob-sub.open{display:block}
+.mob-grp-t{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);padding:.55rem 0 .22rem}
+.mob-slink{display:block;font-size:.8rem;color:var(--muted);padding:.24rem 0;cursor:pointer;border:none;background:none;font-family:'Jost',sans-serif;text-align:left}
+.mob-slink:hover{color:var(--gold)}
+.mob-brands-g{display:grid;grid-template-columns:repeat(3,1fr);gap:.12rem .4rem}
+
+/* LAYOUT */
+.wrap{display:flex;flex:1}
+aside{width:195px;min-width:195px;background:var(--white);border-right:1px solid var(--border);padding:1.4rem 0;position:sticky;top:calc(var(--nh) + 44px);height:calc(100vh - var(--nh) - 44px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(184,145,90,.22) transparent}
+aside::-webkit-scrollbar{width:3px}
+aside::-webkit-scrollbar-thumb{background:rgba(184,145,90,.22);border-radius:99px}
+aside.off{display:none}
+.sb-ttl{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-l);padding:0 1.1rem .6rem;font-weight:600}
+.sb-grp{margin-bottom:.8rem}
+.sb-grp-n{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);padding:.25rem 1.1rem;font-weight:700}
+.sb-btn{display:block;width:100%;padding:.36rem 1.1rem;background:none;border:none;border-left:2px solid transparent;text-align:left;font-family:'Jost',sans-serif;font-size:.78rem;color:var(--muted);cursor:pointer;transition:color var(--tr),background var(--tr),border-color var(--tr)}
+.sb-btn:hover{color:var(--dark);background:rgba(184,145,90,.05)}
+.sb-btn.on{color:var(--gold);border-left-color:var(--gold);background:rgba(184,145,90,.06);font-weight:500}
+.sb-cnt{float:right;font-size:.66rem;color:var(--muted-l);margin-top:1px}
+
+main{flex:1;min-width:0;padding:2rem 1.8rem}
+.ph{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem}
+.pt{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;letter-spacing:.05em}
+.ps{font-size:.68rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.csec{margin-bottom:2.8rem}
+.csec-t{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;letter-spacing:.05em;color:var(--dark2);padding-bottom:.45rem;border-bottom:1px solid var(--border);margin-bottom:1.1rem;display:flex;align-items:baseline;gap:.7rem}
+.csec-t small{font-family:'Jost',sans-serif;font-size:.63rem;letter-spacing:.13em;color:var(--muted-l);text-transform:uppercase;font-weight:400}
+
+/* GRID & CARD */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1rem}
+.card{background:var(--white);border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh);transition:transform var(--tr),box-shadow var(--tr);display:flex;flex-direction:column;border:1px solid rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(26,22,18,.12)}
+.ci{position:relative;padding-top:112%;background:var(--cream2);overflow:hidden}
+.ci img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .42s cubic-bezier(.4,0,.2,1)}
+.card:hover .ci img{transform:scale(1.06)}
+.bb{position:absolute;top:.55rem;left:.55rem;background:var(--dark2);color:var(--gold-l);font-size:.54rem;letter-spacing:.13em;text-transform:uppercase;padding:.2rem .5rem;border-radius:99px;font-weight:500}
+.bv{position:absolute;bottom:.55rem;right:.55rem;background:rgba(26,22,18,.65);color:var(--cream);font-size:.56rem;padding:.18rem .48rem;border-radius:99px;backdrop-filter:blur(4px)}
+.cb{padding:.75rem;flex:1;display:flex;flex-direction:column;gap:.22rem}
+.c-brand{font-size:.58rem;letter-spacing:.17em;color:var(--gold);text-transform:uppercase;font-weight:600}
+.c-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;color:var(--dark);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-price{font-size:.95rem;font-weight:600;color:var(--dark);margin-top:auto;padding-top:.4rem}
+.dots{display:flex;gap:3px;flex-wrap:wrap;padding:0 .75rem .65rem}
+.dot{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(0,0,0,.09);background-size:cover;background-position:center;flex-shrink:0}
+.dot-m{width:12px;height:12px;border-radius:50%;background:var(--cream2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.46rem;color:var(--muted);font-weight:600}
+
+/* EMPTY */
+.empty{text-align:center;padding:5rem 2rem;color:var(--muted)}
+.empty p:first-child{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--muted-l);margin-bottom:.5rem}
+
+/* MODAL */
+#ov{position:fixed;inset:0;z-index:500;background:rgba(26,22,18,.58);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .26s;padding:1rem}
+#ov.on{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:var(--r-lg);max-width:860px;width:100%;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--sh-modal);transform:translateY(18px) scale(.97);transition:transform .26s cubic-bezier(.4,0,.2,1);scrollbar-width:thin}
+#ov.on .modal{transform:translateY(0) scale(1)}
+.m-img-p{position:relative;background:var(--cream2);border-radius:var(--r-lg) 0 0 var(--r-lg);overflow:hidden;min-height:360px}
+#m-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:opacity .22s}
+.m-cl{position:absolute;top:.8rem;right:.8rem;width:29px;height:29px;background:rgba(26,22,18,.5);border:none;border-radius:50%;cursor:pointer;color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:.95rem;z-index:10;transition:background var(--tr)}
+.m-cl:hover{background:var(--gold-d)}
+.m-inf{padding:1.8rem 1.6rem;display:flex;flex-direction:column;gap:.8rem;overflow-y:auto}
+.m-brand{font-size:.63rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;font-weight:600}
+.m-name{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:400;line-height:1.2;color:var(--dark)}
+.m-cat{font-size:.65rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.m-hr{height:1px;background:var(--border);border:none}
+.m-price{font-size:1.5rem;font-weight:600;color:var(--dark)}
+.m-cl-lbl{font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.38rem}
+#m-cname{font-weight:500;color:var(--dark)}
+.sws{display:flex;gap:6px;flex-wrap:wrap}
+.sw-it{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sw{width:46px;height:46px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color var(--tr),transform var(--tr),box-shadow var(--tr);background:var(--cream2)}
+.sw:hover{transform:scale(1.08);box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.sw.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.sw img{width:100%;height:100%;object-fit:cover}
+.sw-l{font-size:.54rem;color:var(--muted);max-width:46px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.m-sku{font-size:.66rem;color:var(--muted-l);letter-spacing:.05em}
+
+/* RESPONSIVE */
+@media(max-width:880px){
+  .modal{grid-template-columns:1fr}
+  .m-img-p{border-radius:var(--r-lg) var(--r-lg) 0 0;min-height:240px;height:240px}
+}
+@media(max-width:700px){
+  :root{--nh:54px}
+  .h-top{padding:0 1rem}
+  .hbtn{display:flex}
+  #srch{width:110px}
+  nav{display:none}
+  aside{display:none!important}
+  main{padding:1.1rem .9rem}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.75rem}
+}
+@media(max-width:380px){.grid{grid-template-columns:repeat(2,1fr);gap:.6rem}}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(184,145,90,.22);border-radius:99px}
+</style>
 </head>
 <body>
+
+<div id="up">
+  <div class="u-logo">Noviara Beauty</div>
+  <div class="u-tag">Catálogo de Belleza</div>
+  <div class="u-box" id="dz">
+    <svg class="u-icon" viewBox="0 0 44 44" fill="none" stroke="#b5a99c" stroke-width="1.4">
+      <rect x="4" y="6" width="36" height="32" rx="4"/>
+      <path d="M22 16v12M16 22l6-6 6 6"/><path d="M12 34h20"/>
+    </svg>
+    <p>Arrastra tu <strong>catalogo_dubellay_completo.csv</strong> o haz clic</p>
+    <label class="u-btn">Seleccionar CSV<input type="file" id="finp" accept=".csv" style="display:none"></label>
+    <p class="u-hint">noviara beauty · catálogo oficial</p>
+  </div>
+</div>
+
+<div id="app">
   <header>
-    <!-- Logo NOVIARA -->
-    <img src="logo.png" alt="NOVIARA Logo" class="logo">
-    <h1>NOVIARA BEAUTY</h1>
-    <nav>
-      <ul id="menu-list">
-        <li>
-          <a href="#">Maquillaje</a>
-          <ul>
-            <li><a href="#Labiales">Labiales</a></li>
-            <li><a href="#Labiales_Liquidos">Labiales Líquidos</a></li>
-            <li><a href="#Lipgloss">Lipgloss</a></li>
-            <li><a href="#Sombras">Sombras</a></li>
-            <li><a href="#Bases">Bases</a></li>
-            <li><a href="#Correctores">Correctores</a></li>
-            <li><a href="#Rubores">Rubores</a></li>
-            <li><a href="#Rimel">Rímel</a></li>
-            <li><a href="#Pestañas">Pestañas</a></li>
-            <li><a href="#Cejas">Productos para Cejas</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Cuidado de la piel</a>
-          <ul>
-            <li><a href="#Aceites">Aceites</a></li>
-            <li><a href="#Cremas">Cremas</a></li>
-            <li><a href="#Mascarillas">Mascarillas</a></li>
-            <li><a href="#Protector_Solar">Protector Solar</a></li>
-            <li><a href="#Limpiadores_Faciales">Limpiadores Faciales</a></li>
-            <li><a href="#Serum_Tonicos">Serum y Tónicos</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Cuidado del cabello</a>
-          <ul>
-            <li><a href="#Shampoos_Acondicionadores">Shampoos y Acondicionadores</a></li>
-            <li><a href="#Tintes">Tintes</a></li>
-            <li><a href="#Tratamientos_Cabello_Barba">Tratamientos para Cabello y Barba</a></li>
-            <li><a href="#Fijadores">Fijadores para Cabello</a></li>
-            <li><a href="#Decolorantes">Decolorantes y Peróxidos</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Marcas</a>
-          <ul>
-            <li><a href="#Bissu">Bissú</a></li>
-            <li><a href="#Italia">Italia</a></li>
-            <li><a href="#PinkUp">Pink Up</a></li>
-            <li><a href="#Yuya">Yuya</a></li>
-            <li><a href="#Beauty_Creations">Beauty Creations</a></li>
-            <li><a href="#Romantic_Beauty">Romantic Beauty</a></li>
-            <li><a href="#By_Apple">By Apple</a></li>
-            <li><a href="#Ultramo">Ultramo</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
+    <div class="h-top">
+      <a class="logo" href="#" onclick="goAll();return false">Noviara Beauty<em>Tu Belleza en la Nube</em></a>
+      <div class="h-right">
+        <input type="text" id="srch" placeholder="Buscar…">
+        <button class="hbtn" id="hbtn"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav><ul class="nav-list" id="navul"></ul></nav>
   </header>
+  <div id="mob"></div>
+  <div class="wrap">
+    <aside id="sb"></aside>
+    <main>
+      <div class="ph"><h1 class="pt" id="ptitle">Todos los Productos</h1><span class="ps" id="psub"></span></div>
+      <div id="prods"></div>
+    </main>
+  </div>
+</div>
 
-  <div id="catalogo"></div>
+<div id="ov">
+  <div class="modal">
+    <div class="m-img-p">
+      <img id="m-img" src="" alt="">
+      <button class="m-cl" id="mcl">✕</button>
+    </div>
+    <div class="m-inf">
+      <div><div class="m-brand" id="mbrand"></div><h2 class="m-name" id="mname"></h2><div class="m-cat" id="mcat"></div></div>
+      <hr class="m-hr">
+      <div class="m-price" id="mprice"></div>
+      <hr class="m-hr">
+      <div id="mcolwrap" style="display:none">
+        <div class="m-cl-lbl">Color: <span id="m-cname">—</span></div>
+        <div class="sws" id="msws"></div>
+      </div>
+      <div class="m-sku" id="msku"></div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    async function cargarCSV() {
-      const response = await fetch("catalogo_dubellay.csv");
-      const data = await response.text();
+<script>
+// ══════════════════════════════════════════════════════════
+// MAPA EXACTO — generado del análisis real del CSV
+// Cada clave es EXACTAMENTE el valor de la columna "Categoria"
+// section: 0=Novedades 1=Maquillaje 2=Piel 3=Cabello 4=Marcas
+// ══════════════════════════════════════════════════════════
+const CATMAP = {
+  // NOVEDADES
+  "Primavera 2026":{s:0,g:"Temporada"},
 
-      const filas = data.split("\n").slice(1); // saltar encabezado
-      const contenedor = document.getElementById("catalogo");
+  // MAQUILLAJE — Rostro
+  "Bases":{s:1,g:"Rostro"},"Contornos":{s:1,g:"Rostro"},"Correctores":{s:1,g:"Rostro"},
+  "Fijadores":{s:1,g:"Rostro"},"Iluminadores":{s:1,g:"Rostro"},"Maquillaje En Polvo":{s:1,g:"Rostro"},
+  "Primers Para Rostro":{s:1,g:"Rostro"},"Rubor":{s:1,g:"Rostro"},
+  "Rostro":{s:1,g:"Rostro"},"Maquillaje":{s:1,g:"Rostro"},
 
-      let categorias = {};
+  // MAQUILLAJE — Ojos
+  "Delineadores":{s:1,g:"Ojos"},"Glitter":{s:1,g:"Ojos"},"Paleta De Sombras":{s:1,g:"Ojos"},
+  "Pestanas":{s:1,g:"Ojos"},"Primer Para Ojos":{s:1,g:"Ojos"},"Productos Para Cejas":{s:1,g:"Ojos"},
+  "Rimel":{s:1,g:"Ojos"},"Sombra Para Ojos":{s:1,g:"Ojos"},
+  "Tratamiento Para Ojos Y Pestanas":{s:1,g:"Ojos"},"Ojos":{s:1,g:"Ojos"},
 
-      filas.forEach(fila => {
-        const columnas = fila.split(",");
-        if (columnas.length < 6) return;
+  // MAQUILLAJE — Labios
+  "Cuidado De Labios":{s:1,g:"Labios"},"Delineadores De Labios":{s:1,g:"Labios"},
+  "Labiales":{s:1,g:"Labios"},"Labiales Liquidos":{s:1,g:"Labios"},
+  "Lipgloss":{s:1,g:"Labios"},"Labios":{s:1,g:"Labios"},
 
-        const categoria = columnas[0];
-        const marca = columnas[1];
-        const titulo = columnas[2];
-        const precioFinal = columnas[4];
-        let imagen = columnas[5];
+  // MAQUILLAJE — Uñas
+  "Accesorios Para Unas":{s:1,g:"Uñas"},"Acetona":{s:1,g:"Uñas"},"Barnices":{s:1,g:"Uñas"},
+  "Limas":{s:1,g:"Uñas"},"Tratamiento Para Unas":{s:1,g:"Uñas"},"Unas":{s:1,g:"Uñas"},
 
-        if (imagen.startsWith("//")) {
-          imagen = "https:" + imagen;
-        }
+  // MAQUILLAJE — Accesorios
+  "Accesorios":{s:1,g:"Accesorios"},"Aplicadores":{s:1,g:"Accesorios"},
+  "Bisuteria Y Accesorios Para Cabello":{s:1,g:"Accesorios"},"Brochas De Maquillaje":{s:1,g:"Accesorios"},
+  "Cepillos De Cabello":{s:1,g:"Accesorios"},"Cortaunas":{s:1,g:"Accesorios"},
+  "Cosmetiqueras":{s:1,g:"Accesorios"},"Decoraciones Para Rostro Y Unas":{s:1,g:"Accesorios"},
+  "Espejos":{s:1,g:"Accesorios"},"Esponjas De Maquillaje":{s:1,g:"Accesorios"},
+  "Pegamento De Pestanas":{s:1,g:"Accesorios"},"Perfiladores Pinzas Y Depiladores":{s:1,g:"Accesorios"},
+  "Planchas Y Rizadores":{s:1,g:"Accesorios"},"Sacapuntas":{s:1,g:"Accesorios"},
+  "Tijeras":{s:1,g:"Accesorios"},"Silica":{s:1,g:"Accesorios"},"Silicare":{s:1,g:"Accesorios"},
 
-        // Crear sección por categoría
-        if (!categorias[categoria]) {
-          const h2 = document.createElement("h2");
-          h2.textContent = categoria;
-          h2.id = categoria.replace(/\s+/g, "_");
-          contenedor.appendChild(h2);
-          categorias[categoria] = h2;
-        }
+  // CUIDADO DE LA PIEL — Tratamientos
+  "Cremas":{s:2,g:"Tratamientos Faciales"},"Cuidado De La Piel":{s:2,g:"Tratamientos Faciales"},
+  "Desmaquillante":{s:2,g:"Tratamientos Faciales"},"Exfoliante":{s:2,g:"Tratamientos Faciales"},
+  "Limpiadores Faciales":{s:2,g:"Tratamientos Faciales"},"Mascarillas":{s:2,g:"Tratamientos Faciales"},
+  "Protector Solar":{s:2,g:"Tratamientos Faciales"},"Serum":{s:2,g:"Tratamientos Faciales"},
+  "Jabones":{s:2,g:"Tratamientos Faciales"},
 
-        const div = document.createElement("div");
-        div.className = "producto";
-        div.innerHTML = `
-          <img src="${imagen}" alt="${titulo}">
-          <div class="titulo">${marca} - ${titulo}</div>
-          <div class="precio">$${precioFinal} MXN</div>
-        `;
-        contenedor.appendChild(div);
+  // CUIDADO DE LA PIEL — Cuerpo
+  "Body Mist":{s:2,g:"Cuerpo"},"Aceites":{s:2,g:"Cuerpo"},"Cremas Para Peinar":{s:2,g:"Cuerpo"},
+
+  // CUIDADO DEL CABELLO
+  "Shampoos Y Acondicionadores":{s:3,g:"Lavado"},
+  "Decolorantes Y Peroxidos":{s:3,g:"Color"},"Tintes":{s:3,g:"Color"},
+  "Tratamientos Para Cabello Y Barba":{s:3,g:"Tratamientos"},
+  "Fijadores Para Cabello":{s:3,g:"Styling"},
+  "Cuidado Del Cabello":{s:3,g:"General"},
+
+  // TODO LO DEMÁS → Marcas (s:4) — se asigna automáticamente abajo
+};
+
+const SECTIONS=[
+  {name:"Novedades"},
+  {name:"Maquillaje"},
+  {name:"Cuidado De La Piel"},
+  {name:"Cuidado Del Cabello"},
+  {name:"Marcas"},
+];
+
+let catalog={};
+let activeS=null,activeG=null,activeC=null,searchQ='';
+
+// CSV
+function parseCSV(txt){
+  const lines=txt.trim().split('\n');
+  const hdrs=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line=>{
+    const cols=[];let cur='',inQ=false;
+    for(const c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
+    cols.push(cur.trim());
+    const r={};hdrs.forEach((h,i)=>r[h]=(cols[i]||'').replace(/^"|"$/g,''));return r;
+  }).filter(r=>r['Título']||r['Titulo']);
+}
+function gf(row,...ks){for(const k of ks)if(row[k]!==undefined)return row[k];return '';}
+
+function buildCatalog(rows){
+  catalog={};
+  for(const row of rows){
+    const cat=gf(row,'Categoria')||'Sin Categoría';
+    const tit=gf(row,'Título','Titulo')||'';
+    const marca=gf(row,'Marca')||'';
+    const key=tit+'|||'+marca;
+    const p40=parseFloat(gf(row,'Precio +40% (MXN)','Precio +40%'))||0;
+    const color=gf(row,'Color / Variante','Color')||'';
+    const sku=gf(row,'SKU')||'';
+    const img=gf(row,'Imagen URL','Imagen')||'';
+    if(!catalog[cat])catalog[cat]={};
+    if(!catalog[cat][key])catalog[cat][key]={tit,marca,cat,p40,vars:[]};
+    if(img)catalog[cat][key].vars.push({color,sku,img});
+  }
+}
+
+function secOf(c){return CATMAP[c]?CATMAP[c].s:4;}
+function grpOf(c){return CATMAP[c]?CATMAP[c].g:c;}
+
+function catsOf(si,gi=null){
+  return Object.keys(catalog).filter(c=>{
+    if(secOf(c)!==si)return false;
+    if(gi!==null&&grpOf(c)!==gi)return false;
+    return true;
+  });
+}
+function grpsOf(si){const s=new Set();catsOf(si).forEach(c=>s.add(grpOf(c)));return[...s].sort();}
+
+// NAV DESKTOP
+function buildNav(){
+  const ul=document.getElementById('navul');
+  ul.innerHTML='';
+  const chev=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"/></svg>`;
+
+  const liA=document.createElement('li');liA.className='ni';
+  liA.innerHTML=`<button class="nl${activeS===null?' act':''}" onclick="goAll()">Todos</button>`;
+  ul.appendChild(liA);
+
+  SECTIONS.forEach((sec,si)=>{
+    const cats=catsOf(si);
+    if(!cats.length)return;
+    const li=document.createElement('li');li.className='ni';
+    let mega='';
+
+    if(si===4){
+      const sorted=cats.sort((a,b)=>a.localeCompare(b,'es'));
+      mega=`<div class="mega mega-wide" style="padding:1.2rem 1.4rem;flex-direction:column">
+        <div class="mega-brands-grid">
+          ${sorted.map(c=>`<button class="mlink${activeC===c?' acts':''}" onclick="goCat('${esc(c)}',${si})">${esc(c)}</button>`).join('')}
+        </div></div>`;
+    } else {
+      const groups=grpsOf(si);
+      const cols=groups.map(grp=>{
+        const gc=catsOf(si,grp).sort();
+        if(!gc.length)return'';
+        return `<div class="mega-col"><div class="mc-grp">${esc(grp)}</div>
+          ${gc.map(c=>`<button class="mlink${activeC===c?' acts':''}" onclick="goCat('${esc(c)}',${si})">${esc(c)}</button>`).join('')}
+        </div>`;
+      }).join('');
+      mega=`<div class="mega"><div class="mega-cols">${cols}</div></div>`;
+    }
+    li.innerHTML=`<button class="nl${activeS===si?' act':''}" onclick="goSec(${si})">${esc(sec.name)} ${chev}</button>${mega}`;
+    ul.appendChild(li);
+  });
+}
+
+// NAV MOBILE
+function buildMob(){
+  const el=document.getElementById('mob');
+  const chev=`<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>`;
+  let h=`<button class="mob-sec-btn" onclick="goAll();closeMob()">Todos los Productos</button>`;
+  SECTIONS.forEach((sec,si)=>{
+    const cats=catsOf(si);
+    if(!cats.length)return;
+    h+=`<button class="mob-sec-btn" onclick="togMob(this)">${esc(sec.name)} ${chev}</button><div class="mob-sub">`;
+    if(si===4){
+      h+=`<div class="mob-brands-g">`;
+      cats.sort().forEach(c=>{h+=`<button class="mob-slink" onclick="goCat('${esc(c)}',${si});closeMob()">${esc(c)}</button>`;});
+      h+=`</div>`;
+    } else {
+      grpsOf(si).forEach(grp=>{
+        const gc=catsOf(si,grp).sort();
+        if(!gc.length)return;
+        h+=`<div class="mob-grp-t">${esc(grp)}</div>`;
+        gc.forEach(c=>{h+=`<button class="mob-slink" onclick="goCat('${esc(c)}',${si});closeMob()">${esc(c)}</button>`;});
       });
     }
+    h+=`</div>`;
+  });
+  el.innerHTML=h;
+}
+function togMob(btn){btn.classList.toggle('open');btn.nextElementSibling?.classList.toggle('open');}
 
-    cargarCSV();
-  </script>
+// SIDEBAR
+function buildSidebar(){
+  const sb=document.getElementById('sb');
+  if(activeS===null){sb.className='off';return;}
+  sb.className='';
+  const sec=SECTIONS[activeS];
+  let h=`<div class="sb-ttl">${esc(sec.name)}</div>`;
+  if(activeS===4){
+    h+=`<div class="sb-grp">`;
+    catsOf(4).sort().forEach(c=>{
+      const n=Object.keys(catalog[c]||{}).length;
+      h+=`<button class="sb-btn${activeC===c?' on':''}" onclick="goCat('${esc(c)}',4)">${esc(c)}<span class="sb-cnt">${n}</span></button>`;
+    });
+    h+=`</div>`;
+  } else {
+    grpsOf(activeS).forEach(grp=>{
+      const gc=catsOf(activeS,grp).sort();
+      if(!gc.length)return;
+      h+=`<div class="sb-grp"><div class="sb-grp-n">${esc(grp)}</div>`;
+      gc.forEach(c=>{
+        const n=Object.keys(catalog[c]||{}).length;
+        h+=`<button class="sb-btn${activeC===c?' on':''}" onclick="goCat('${esc(c)}',${activeS})">${esc(c)}<span class="sb-cnt">${n}</span></button>`;
+      });
+      h+=`</div>`;
+    });
+  }
+  sb.innerHTML=h;
+}
+
+// RENDER PRODUCTOS
+function renderProds(){
+  const el=document.getElementById('prods');
+  const q=searchQ.toLowerCase().trim();
+  let cats=[];
+  if(activeC)cats=[activeC];
+  else if(activeS!==null)cats=catsOf(activeS);
+  else cats=Object.keys(catalog).sort((a,b)=>a.localeCompare(b,'es'));
+
+  const showSecs=!activeC&&cats.length>1;
+  let html='',total=0;
+
+  if(showSecs&&activeS!==null){
+    // Agrupar por grupo dentro de la sección
+    const byGrp={};
+    cats.forEach(c=>{const g=grpOf(c);if(!byGrp[g])byGrp[g]=[];byGrp[g].push(c);});
+    Object.keys(byGrp).sort().forEach(grp=>{
+      const prods=byGrp[grp].flatMap(c=>Object.values(catalog[c]||{}).filter(p=>matchQ(p,q)));
+      if(!prods.length)return;
+      total+=prods.length;
+      html+=`<section class="csec"><h2 class="csec-t">${esc(grp)} <small>${prods.length} productos</small></h2>
+        <div class="grid">${prods.map(p=>cardH(p)).join('')}</div></section>`;
+    });
+  } else if(showSecs){
+    // "Todos" — agrupar por categoría CSV
+    cats.forEach(c=>{
+      const prods=Object.values(catalog[c]||{}).filter(p=>matchQ(p,q));
+      if(!prods.length)return;
+      total+=prods.length;
+      html+=`<section class="csec"><h2 class="csec-t">${esc(c)} <small>${prods.length} productos</small></h2>
+        <div class="grid">${prods.map(p=>cardH(p)).join('')}</div></section>`;
+    });
+  } else {
+    const prods=cats.flatMap(c=>Object.values(catalog[c]||{}).filter(p=>matchQ(p,q)));
+    total=prods.length;
+    html=prods.length?`<div class="grid">${prods.map(p=>cardH(p)).join('')}</div>`:'';
+  }
+
+  if(!html)html=`<div class="empty"><p>Sin resultados</p><p>No encontramos productos para "${esc(searchQ)}"</p></div>`;
+  el.innerHTML=html;
+  document.getElementById('ptitle').textContent=activeC?activeC:(activeS!==null?SECTIONS[activeS].name:'Todos los Productos');
+  document.getElementById('psub').textContent=`${total} productos`;
+  el.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click',()=>openModal(card.dataset.cat,card.dataset.key));
+  });
+}
+
+function matchQ(p,q){if(!q)return true;return p.tit.toLowerCase().includes(q)||p.marca.toLowerCase().includes(q)||p.vars.some(v=>v.color.toLowerCase().includes(q));}
+
+function cardH(p){
+  const img=p.vars[0]?.img||'';
+  const vc=p.vars.length;
+  const key=esc(p.tit+'|||'+p.marca);
+  return `<article class="card" data-cat="${esc(p.cat)}" data-key="${key}">
+    <div class="ci">
+      <img src="${esc(img)}" alt="${esc(p.tit)}" loading="lazy" onerror="this.style.opacity=0">
+      ${p.marca?`<div class="bb">${esc(p.marca)}</div>`:''}
+      ${vc>1?`<div class="bv">${vc} tonos</div>`:''}
+    </div>
+    <div class="cb">
+      <div class="c-brand">${esc(p.marca)}</div>
+      <div class="c-name">${esc(p.tit)}</div>
+      <div class="c-price">${fmt(p.p40)}</div>
+    </div>
+    ${vc>1?mkdots(p.vars):''}
+  </article>`;
+}
+
+function mkdots(vs){
+  const show=vs.slice(0,6),extra=vs.length-6;
+  let d='<div class="dots">';
+  show.forEach(v=>d+=`<div class="dot" style="background-image:url('${esc(v.img)}')" title="${esc(v.color)}"></div>`);
+  if(extra>0)d+=`<div class="dot-m">+${extra}</div>`;
+  return d+'</div>';
+}
+
+// MODAL
+let curP=null;
+function openModal(cat,key){
+  const p=catalog[cat]?.[key];if(!p)return;
+  curP=p;
+  document.getElementById('mbrand').textContent=p.marca;
+  document.getElementById('mname').textContent=p.tit;
+  document.getElementById('mcat').textContent=p.cat;
+  document.getElementById('mprice').textContent=fmt(p.p40);
+  buildSws(p.vars);pickSw(0);
+  document.getElementById('ov').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function buildSws(vs){
+  const strip=document.getElementById('msws');
+  const wrap=document.getElementById('mcolwrap');
+  wrap.style.display=vs.length>1?'block':'none';
+  strip.innerHTML=vs.map((v,i)=>`
+    <div class="sw-it">
+      <div class="sw" data-i="${i}" title="${esc(v.color)}">
+        <img src="${esc(v.img)}" alt="${esc(v.color)}" loading="lazy" onerror="this.parentElement.style.background='#e8e0d5'">
+      </div>
+      ${v.color?`<div class="sw-l">${esc(v.color.substring(0,10))}</div>`:''}
+    </div>`).join('');
+  strip.querySelectorAll('.sw').forEach(sw=>sw.addEventListener('click',()=>pickSw(+sw.dataset.i)));
+}
+function pickSw(i){
+  if(!curP)return;const v=curP.vars[i];if(!v)return;
+  document.getElementById('m-img').src=v.img;
+  document.getElementById('m-cname').textContent=v.color||'Único';
+  document.getElementById('msku').textContent=v.sku?`SKU: ${v.sku}`:'';
+  document.querySelectorAll('.sw').forEach((s,j)=>s.classList.toggle('on',j===i));
+}
+function closeModal(){document.getElementById('ov').classList.remove('on');document.body.style.overflow='';}
+document.getElementById('mcl').addEventListener('click',closeModal);
+document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// NAVEGACIÓN
+function goAll(){activeS=null;activeG=null;activeC=null;render();}
+function goSec(si){activeS=si;activeG=null;activeC=null;render();}
+function goCat(cat,si){activeS=si;activeC=cat;activeG=grpOf(cat);render();}
+function render(){buildNav();buildSidebar();renderProds();}
+
+// BÚSQUEDA
+let st;
+document.getElementById('srch').addEventListener('input',e=>{
+  clearTimeout(st);st=setTimeout(()=>{searchQ=e.target.value;renderProds();},220);
+});
+
+// MENÚ MÓVIL
+document.getElementById('hbtn').addEventListener('click',()=>{
+  const m=document.getElementById('mob');
+  const open=m.classList.toggle('open');
+  document.body.style.overflow=open?'hidden':'';
+});
+function closeMob(){document.getElementById('mob').classList.remove('open');document.body.style.overflow='';}
+
+// CARGA CSV
+function loadData(txt){
+  buildCatalog(parseCSV(txt));
+  document.getElementById('up').classList.add('gone');
+  document.getElementById('app').classList.add('on');
+  buildMob();render();
+}
+const finp=document.getElementById('finp');
+finp.addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>loadData(ev.target.result);r.readAsText(f,'UTF-8');
+});
+const dz=document.getElementById('dz');
+dz.addEventListener('click',()=>finp.click());
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('drag');
+  const f=e.dataTransfer.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>loadData(ev.target.result);r.readAsText(f,'UTF-8');
+});
+fetch('catalogo_dubellay_completo.csv')
+  .then(r=>{if(!r.ok)throw 0;return r.text();}).then(loadData).catch(()=>{});
+
+function fmt(n){return(n||0).toLocaleString('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
 </body>
 </html>
