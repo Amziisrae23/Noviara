@@ -22,23 +22,8 @@
 html{scroll-behavior:smooth}
 body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;overflow-x:hidden}
 
-/* UPLOAD */
-#up{position:fixed;inset:0;background:var(--dark2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
-#up.gone{display:none}
-.u-logo{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;letter-spacing:.2em;color:var(--gold-l);text-transform:uppercase;margin-bottom:.3rem}
-.u-tag{font-size:.7rem;letter-spacing:.26em;color:var(--muted-l);text-transform:uppercase;margin-bottom:3rem}
-.u-box{border:1.5px dashed var(--border-s);border-radius:var(--r-lg);padding:3rem 4rem;text-align:center;cursor:pointer;transition:border-color var(--tr),background var(--tr);max-width:420px;width:90%}
-.u-box:hover,.u-box.drag{border-color:var(--gold-l);background:rgba(184,145,90,.06)}
-.u-icon{width:44px;height:44px;margin:0 auto 1.2rem;opacity:.4}
-.u-box p{font-size:.88rem;color:var(--muted-l);line-height:1.65}
-.u-box p strong{color:var(--gold-l);font-weight:500}
-.u-btn{margin-top:1.4rem;padding:.58rem 1.8rem;background:var(--gold);color:var(--cream);border:none;border-radius:99px;font-family:'Jost',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background var(--tr);display:inline-block}
-.u-btn:hover{background:var(--gold-d)}
-.u-hint{margin-top:1.2rem;font-size:.7rem;color:rgba(181,169,156,.4);letter-spacing:.06em}
-
-/* APP */
-#app{display:none;flex-direction:column;min-height:100vh}
-#app.on{display:flex}
+/* APP - Visible por defecto */
+#app{display:flex;flex-direction:column;min-height:100vh}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:300;background:var(--white);box-shadow:0 1px 14px rgba(26,22,18,.07)}
